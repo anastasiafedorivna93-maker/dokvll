@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Юридична допомога</title>
+
+  <style>
+    :root{
+      --bg1:#070c12;
+      --bg2:#0a1320;
+
+      --glassA: rgba(255,255,255,.16);
+      --glassB: rgba(255,255,255,.08);
+      --border: rgba(255,255,255,.26);
+
+      --text:#ffffff;
+      --muted: rgba(255,255,255,.76);
+      --muted2: rgba(255,255,255,.58);
+
+      --accent1:#6dd5fa;
+      --accent2:#2980b9;
+
+      --ok:#a78bfa; /* check color */
+      --shadow: 0 30px 90px rgba(0,0,0,.62);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 520px at 15% 0%, rgba(109,213,250,.22), transparent 58%),
+        radial-gradient(900px 520px at 85% 105%, rgba(41,128,185,.25), transparent 60%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+      display:grid;
+      place-items:center;
+      padding:24px;
+      overflow:hidden;
+    }
+
+    /* ===== Floating blobs background ===== */
+    .blob{
+      position:absolute;
+      width:420px;
+      height:420px;
+      border-radius:50%;
+      filter: blur(40px);
+      opacity:.35;
+      pointer-events:none;
+      transform: translate3d(0,0,0);
+      animation: float 10s ease-in-out infinite;
+      mix-blend-mode: screen;
+    }
+    .blob.b1{ left:-140px; top:-160px; background: radial-gradient(circle at 30% 30%, rgba(109,213,250,.9), transparent 65%); }
+    .blob.b2{ right:-160px; bottom:-180px; background: radial-gradient(circle at 60% 40%, rgba(41,128,185,.95), transparent 65%); animation-duration: 12s; }
+    .blob.b3{ left:50%; top:70%; width:320px; height:320px; transform: translateX(-50%); background: radial-gradient(circle at 30% 70%, rgba(167,139,250,.9), transparent 65%); animation-duration: 14s; opacity:.25; }
+
+    @keyframes float{
+      0%,100%{ transform: translate3d(0,0,0) scale(1); }
+      50%{ transform: translate3d(0,-18px,0) scale(1.03); }
+    }
+
+    .wrap{ width:min(980px,100%); position:relative; z-index:2; }
+
+    /* ===== Glass card ===== */
+    .glass{
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: linear-gradient(180deg, var(--glassA), var(--glassB));
+      border:1px solid var(--border);
+      border-radius:26px;
+      box-shadow:var(--shadow);
+      padding: clamp(24px, 4vw, 56px);
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+
+      /* subtle entrance */
+      animation: popIn .7s ease both;
+    }
+
+    /* Gradient glow border */
+    .glass::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius:28px;
+      background: conic-gradient(from 180deg, rgba(109,213,250,.5), rgba(41,128,185,.45), rgba(167,139,250,.45), rgba(109,213,250,.5));
+      filter: blur(14px);
+      opacity:.35;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    /* Shine sweep */
+    .glass::after{
+      content:"";
+      position:absolute;
+      top:-120px;
+      left:-60%;
+      width:60%;
+      height:520px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.18), transparent);
+      transform: rotate(18deg);
+      opacity:.6;
+      animation: shine 6.5s ease-in-out infinite;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    @keyframes shine{
+      0%   { left:-70%; opacity:.0; }
+      12%  { opacity:.7; }
+      32%  { left:110%; opacity:.0; }
+      100% { left:110%; opacity:.0; }
+    }
+
+    @keyframes popIn{
+      from{ transform: translateY(10px) scale(.985); opacity:0; }
+      to{ transform: translateY(0) scale(1); opacity:1; }
+    }
+
+    .content{ position:relative; z-index:1; }
+
+    h1{
+      margin:0 0 14px;
+      font-size: clamp(26px, 3.8vw, 46px);
+      font-weight:900;
+      line-height:1.15;
+      letter-spacing:.3px;
+      animation: fadeUp .7s .05s ease both;
+    }
+
+    .highlight{
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow: 0 10px 30px rgba(41,128,185,.18);
+    }
+
+    .lead{
+      font-size: clamp(16px, 2.2vw, 22px);
+      color:var(--muted);
+      font-weight:700;
+      margin: 0 auto 26px;
+      max-width: 760px;
+      line-height:1.45;
+      animation: fadeUp .7s .12s ease both;
+    }
+
+    @keyframes fadeUp{
+      from{ transform: translateY(10px); opacity:0; }
+      to{ transform: translateY(0); opacity:1; }
+    }
+
+    .list{
+      margin: 0 auto 34px;
+      max-width:760px;
+      display:grid;
+      gap:14px;
+      text-align:left;
+      animation: fadeUp .7s .20s ease both;
+    }
+
+    .item{
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:16px;
+      padding:16px 18px;
+      font-weight:700;
+      color:var(--muted);
+
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    /* hover glow */
+    .item:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.12);
+      border-color: rgba(109,213,250,.35);
+      box-shadow: 0 18px 45px rgba(0,0,0,.28);
+    }
+
+    /* micro shine for items on hover */
+    .item::after{
+      content:"";
+      position:absolute;
+      top:-50px;
+      left:-60%;
+      width:55%;
+      height:240px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
+      transform: rotate(18deg);
+      opacity:0;
+      transition: opacity .2s ease;
+      pointer-events:none;
+    }
+    .item:hover::after{ opacity:.9; left:110%; transition: left .8s ease, opacity .2s ease; }
+
+    .check{
+      width:22px; height:22px; flex:0 0 22px;
+      margin-top:2px;
+      filter: drop-shadow(0 10px 18px rgba(167,139,250,.25));
+    }
+
+    .item b, .item span{
+      color:#fff;
+      font-weight:900;
+    }
+
+    /* ===== Button ===== */
+    .btn{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:min(520px,100%);
+      margin:0 auto 18px;
+      padding:18px 22px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.32);
+      background: linear-gradient(180deg, var(--accent1), var(--accent2));
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      font-size:18px;
+      box-shadow:0 22px 60px rgba(41,128,185,.45);
+      transition: transform .16s ease, filter .16s ease, box-shadow .16s ease;
+      user-select:none;
+      animation: fadeUp .7s .28s ease both;
+      overflow:hidden;
+    }
+
+    /* button glow ring */
+    .btn::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius:18px;
+      background: radial-gradient(closest-side, rgba(109,213,250,.55), transparent 70%);
+      opacity:.0;
+      transition: opacity .18s ease;
+      pointer-events:none;
+    }
+
+    .btn:hover{
+      transform: translateY(-2px);
+      filter: brightness(1.07);
+      box-shadow:0 26px 70px rgba(41,128,185,.52);
+    }
+    .btn:hover::before{ opacity:.65; }
+    .btn:active{ transform: translateY(1px); }
+
+    /* ripple */
+    .ripple{
+      position:absolute;
+      border-radius:50%;
+      transform: scale(0);
+      animation: ripple .6s ease-out;
+      background: rgba(255,255,255,.35);
+      pointer-events:none;
+      mix-blend-mode: overlay;
+    }
+    @keyframes ripple{
+      to{ transform: scale(3.2); opacity:0; }
+    }
+
+    .hint{
+      font-size:14px;
+      color:var(--muted2);
+      line-height:1.45;
+      margin: 0 0 20px;
+      animation: fadeUp .7s .34s ease both;
+    }
+
+    .nick{
+      font-size: clamp(22px, 4vw, 46px);
+      font-weight:900;
+      letter-spacing:.6px;
+      text-shadow:0 12px 30px rgba(0,0,0,.6);
+      animation: fadeUp .7s .40s ease both;
+    }
+
+    .footer{
+      margin-top:16px;
+      font-size:12px;
+      color:rgba(255,255,255,.35);
+      text-align:center;
+      position:relative;
+      z-index:2;
+    }
+
+    @media (max-width:420px){
+      .btn{font-size:16px;padding:16px}
+      .item{font-size:14px}
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; }
+      .glass::after{ display:none; }
+      .blob{ display:none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- background blobs -->
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <main class="wrap">
+    <section class="glass">
+      <div class="content">
+
+        <h1>
+          <span class="highlight">Зняття з обліку · Відстрочка · Бронь · Інвалідність</span>
+        </h1>
+
+        <p class="lead">
+          Ми допомагаємо людям, які опинилися у складній ситуації.<br>
+          Якщо тобі потрібне <b>законне рішення</b> — ти за адресою.
+        </p>
+
+        <div class="list">
+          <div class="item">
+            <svg class="check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 6.5 9.2 17.3 4 12.1" stroke="var(--ok)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div><span>Зняття з військового обліку</span> у складних випадках</div>
+          </div>
+
+          <div class="item">
+            <svg class="check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 6.5 9.2 17.3 4 12.1" stroke="var(--ok)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div><span>Оформлення відстрочки</span> та супровід по ВЛК</div>
+          </div>
+
+          <div class="item">
+            <svg class="check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 6.5 9.2 17.3 4 12.1" stroke="var(--ok)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div><span>Бронювання</span> через роботу та офіційні підстави</div>
+          </div>
+
+          <div class="item">
+            <svg class="check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 6.5 9.2 17.3 4 12.1" stroke="var(--ok)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div><span>Інвалідність</span> — повний юридичний супровід</div>
+          </div>
+
+          <div class="item">
+            <svg class="check" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M20 6.5 9.2 17.3 4 12.1" stroke="var(--ok)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div><span>Конфіденційно</span> · <span>без передоплат</span> · <span>по закону</span></div>
+          </div>
+        </div>
+
+        <a id="leadBtn" class="btn" href="https://t.me/valentin_dokument" target="_blank" rel="noopener">
+          Написати в Telegram
+        </a>
+
+        <p class="hint">
+          Натискай на кнопку для швидкого звʼязку в Telegram<br>
+          або напиши нам напряму за ніком
+        </p>
+
+        <div class="nick">@valentin_dokument</div>
+
+      </div>
+    </section>
+
+    <div class="footer">© <span id="y"></span></div>
+  </main>
+
+  <script>
+    // footer year
+    document.getElementById("y").textContent = new Date().getFullYear();
+
+    // lead + ripple effect
+    const leadBtn = document.getElementById("leadBtn");
+
+    leadBtn.addEventListener("click", function (e) {
+      // Ripple
+      const rect = leadBtn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const ripple = document.createElement("span");
+      ripple.className = "ripple";
+      ripple.style.width = ripple.style.height = size + "px";
+      ripple.style.left = (e.clientX - rect.left - size / 2) + "px";
+      ripple.style.top  = (e.clientY - rect.top  - size / 2) + "px";
+      leadBtn.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 650);
+
+      // LEAD trigger
+      console.log("LEAD: telegram click");
+
+      if (window.fbq) fbq("track", "Lead");
+      if (window.ttq) ttq.track("SubmitForm");
+      if (window.gtag) gtag("event", "lead", { event_category:"telegram" });
+    });
+  </script>
+
+</body>
+</html>
